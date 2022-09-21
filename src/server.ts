@@ -14,8 +14,20 @@ app.get("/tickets", async (req, res) => {
   res.send(tickets);
 });
 
-app.post("/ticket", (req, res) => {
-  res.send(req.body);
+app.post("/ticket", async (req, res) => {
+  const data = req.body;
+  const ticket = await prisma.tickets.create({
+    data: {
+      title: data.title,
+      owner: data.owner,
+      avatar: data.avatar,
+      status: data.status,
+      progress: data.progress,
+      description: data.description,
+    },
+  });
+
+  res.status(201).json(ticket);
 });
 
 app.delete("/ticket/remove/:id", (req, res) => {
