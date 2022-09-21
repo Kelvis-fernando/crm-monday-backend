@@ -30,8 +30,14 @@ app.post("/ticket", async (req, res) => {
   res.status(201).json(ticket);
 });
 
-app.delete("/ticket/remove/:id", (req, res) => {
-  res.send("delete ticket");
+app.delete("/ticket/remove/:id", async (req, res) => {
+  const ticketId = req.params.id;
+  await prisma.tickets.delete({
+    where: {
+      id: ticketId,
+    },
+  });
+  res.status(204).send("Delete ticket success");
 });
 
 app.put("/ticket/update/:id", (req, res) => {
