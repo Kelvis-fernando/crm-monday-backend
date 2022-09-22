@@ -40,8 +40,23 @@ app.delete("/ticket/remove/:id", async (req, res) => {
   res.status(204).send("Delete ticket success");
 });
 
-app.put("/ticket/update/:id", (req, res) => {
-  res.send("update ticket");
+app.put("/ticket/update/:id", async (req, res) => {
+  const ticketId = req.params.id;
+  const body = req.body;
+  await prisma.tickets.updateMany({
+    where: {
+      id: ticketId,
+    },
+    data: {
+      title: body.title,
+      owner: body.owner,
+      avatar: body.avatar,
+      status: body.status,
+      progress: body.progress,
+      description: body.description,
+    },
+  });
+  res.status(200).json(body);
 });
 
 app.listen(3333, () => console.log("App running in port 3333"));
